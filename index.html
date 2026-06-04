@@ -657,6 +657,22 @@
     border-radius: 20px;
     margin-top: 10px;
   }
+
+  /* SUPLEMENTO CON FOTO */
+  .supp-img-wrap {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--black);
+    padding: 16px 0 8px;
+    margin-bottom: 12px;
+  }
+  .supp-product-img {
+    width: 110px;
+    height: 110px;
+    object-fit: contain;
+    display: block;
+  }
   .cibeles-badge {
     display: flex;
     align-items: center;
@@ -1019,6 +1035,120 @@
     margin-top: 8px;
   }
 
+  /* PROGRAM DRAWER */
+  .prog-drawer {
+    position: fixed;
+    bottom: 0; left: 50%; transform: translateX(-50%) translateY(100%);
+    width: 100%; max-width: 430px;
+    height: 92vh;
+    background: var(--black);
+    z-index: 1100;
+    border-radius: 20px 20px 0 0;
+    border-top: 3px solid var(--orange);
+    transition: transform .38s cubic-bezier(.4,0,.2,1);
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  .prog-drawer.open { transform: translateX(-50%) translateY(0); }
+  .prog-drawer-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+    z-index: 1099; display: none; backdrop-filter: blur(2px);
+  }
+  .prog-drawer-overlay.open { display: block; }
+  .prog-drawer-header {
+    position: sticky; top: 0; background: var(--dark);
+    padding: 20px 24px 20px; border-bottom: 1px solid var(--light-gray);
+    z-index: 10; display: flex; align-items: center; gap: 16px;
+  }
+  .prog-drawer-icon {
+    width: 60px; height: 60px;
+    background: linear-gradient(135deg, var(--orange), #c96010);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; flex-shrink: 0;
+  }
+  .prog-drawer-close {
+    position: absolute; top: 14px; right: 18px;
+    background: rgba(244,127,32,0.12); border: 1px solid var(--orange);
+    color: var(--orange); font-size: 18px; width: 36px; height: 36px;
+    border-radius: 50%; cursor: pointer; display: flex;
+    align-items: center; justify-content: center; font-weight: 700;
+  }
+  .prog-drawer-body { padding: 24px; }
+  .prog-info-card {
+    background: var(--card);
+    border-left: 4px solid var(--orange);
+    border-radius: 0 10px 10px 0;
+    padding: 16px 18px;
+    display: flex; gap: 14px; align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  .prog-info-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+  .prog-info-card h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px; font-weight: 700;
+    margin-bottom: 6px; color: var(--white);
+  }
+  .prog-info-card p { font-size: 13px; color: #888; line-height: 1.6; }
+  .prog-wa-btn {
+    display: block;
+    background: #25D366; color: #fff; text-align: center;
+    padding: 16px 24px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 17px; letter-spacing: 1px;
+    border-radius: 10px; text-decoration: none; margin-top: 8px;
+  }
+
+  /* BENEFICIOS CLUB */
+  .club-benefits {
+    background: var(--dark);
+    border: 1px solid var(--light-gray);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 24px;
+  }
+  .club-benefits-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 13px; font-weight: 700; letter-spacing: 3px;
+    color: var(--orange); margin-bottom: 14px;
+  }
+  .benefit-row {
+    display: flex; align-items: flex-start; gap: 12px;
+    margin-bottom: 12px;
+  }
+  .benefit-row:last-child { margin-bottom: 0; }
+  .benefit-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .benefit-text { font-size: 13px; color: #bbb; line-height: 1.5; }
+  .benefit-text strong { color: var(--white); }
+
+  /* FIT POINT SECTION */
+  .fitpoint-section { background: var(--black); }
+  .fitpoint-logo-box {
+    display: flex; justify-content: center; align-items: center;
+    padding: 20px 0 8px;
+    margin-bottom: 16px;
+  }
+  .fitpoint-logo-box img { width: 160px; object-fit: contain; filter: brightness(0) invert(1); }
+  .fitpoint-card {
+    background: var(--card);
+    border: 1px solid var(--light-gray);
+    border-radius: 10px;
+    padding: 18px 20px; margin-bottom: 12px;
+  }
+  .fitpoint-card h4 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 18px; font-weight: 700; margin-bottom: 6px;
+  }
+  .fitpoint-card p { font-size: 13px; color: #777; line-height: 1.5; }
+  .fitpoint-discount {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: rgba(244,127,32,0.1); border: 1px solid var(--orange);
+    color: var(--orange); border-radius: 10px; padding: 12px 16px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 15px; letter-spacing: 1px;
+    margin-top: 8px;
+  }
+
 </style>
 </head>
 <body>
@@ -1048,6 +1178,7 @@
   <a href="#kids" onclick="document.querySelector('.mobile-nav').classList.remove('open')">Kids</a>
   <a href="#horarios" onclick="document.querySelector('.mobile-nav').classList.remove('open')">Horarios</a>
   <a href="#suplementos" onclick="document.querySelector('.mobile-nav').classList.remove('open')">Suplementos</a>
+  <a href="#fitpoint" onclick="document.querySelector('.mobile-nav').classList.remove('open')">Fit Point</a>
   <a href="#ropa" onclick="document.querySelector('.mobile-nav').classList.remove('open')">Ropa</a>
   <a href="#unirse" onclick="document.querySelector('.mobile-nav').classList.remove('open')">Unirse</a>
 </div>
@@ -1172,7 +1303,7 @@
   <p class="section-tag">LO QUE OFRECEMOS</p>
   <h2 class="section-title">PROGRAMAS</h2>
   <div class="programs-grid">
-    <div class="program-card">
+    <div class="program-card" onclick="openProgDrawer('running')">
       <div class="program-icon-box">🏃</div>
       <div class="program-info">
         <h3>Running</h3>
@@ -1180,7 +1311,7 @@
       </div>
       <span class="program-arrow">›</span>
     </div>
-    <div class="program-card">
+    <div class="program-card" onclick="openProgDrawer('fuerza')">
       <div class="program-icon-box">🏋️</div>
       <div class="program-info">
         <h3>Fuerza</h3>
@@ -1188,7 +1319,7 @@
       </div>
       <span class="program-arrow">›</span>
     </div>
-    <div class="program-card">
+    <div class="program-card" onclick="openProgDrawer('atletismo')">
       <div class="program-icon-box">🏅</div>
       <div class="program-info">
         <h3>Atletismo</h3>
@@ -1196,7 +1327,7 @@
       </div>
       <span class="program-arrow">›</span>
     </div>
-    <div class="program-card">
+    <div class="program-card" onclick="openProgDrawer('kids')">
       <div class="program-icon-box">👧</div>
       <div class="program-info">
         <h3>runFIT Kids</h3>
@@ -1205,7 +1336,42 @@
       <span class="program-arrow">›</span>
     </div>
   </div>
+
+  <!-- BENEFICIOS DEL CLUB -->
+  <div class="club-benefits">
+    <div class="club-benefits-title">🎁 BENEFICIOS DE SER PARTE DEL CLUB</div>
+    <div class="benefit-row">
+      <span class="benefit-icon">🏷️</span>
+      <span class="benefit-text">Descuentos exclusivos en <strong>New Balance</strong>, <strong>Fit Point</strong> y suplementos de <strong>Cibeles Nutrition</strong></span>
+    </div>
+    <div class="benefit-row">
+      <span class="benefit-icon">💆</span>
+      <span class="benefit-text">Acceso a <strong>masajistas, fisioterapeuta y nutricionista</strong> del equipo</span>
+    </div>
+    <div class="benefit-row">
+      <span class="benefit-icon">📱</span>
+      <span class="benefit-text"><strong>App de fortalecimiento</strong> con rutinas programadas según el período de planificación y tus objetivos</span>
+    </div>
+    <div class="benefit-row">
+      <span class="benefit-icon">👕</span>
+      <span class="benefit-text"><strong>Indumentaria oficial</strong> del equipo runFIT Training</span>
+    </div>
+  </div>
 </section>
+
+<!-- PROGRAM DRAWER -->
+<div class="prog-drawer" id="progDrawer">
+  <div class="prog-drawer-header">
+    <button class="prog-drawer-close" onclick="closeProgDrawer()">✕</button>
+    <div class="prog-drawer-icon" id="progDrawerIcon"></div>
+    <div>
+      <span class="section-tag" id="progDrawerTag" style="display:block;margin-bottom:4px;"></span>
+      <h2 id="progDrawerName" style="font-family:'Bebas Neue',sans-serif;font-size:36px;line-height:1;"></h2>
+    </div>
+  </div>
+  <div class="prog-drawer-body" id="progDrawerBody"></div>
+</div>
+<div class="prog-drawer-overlay" id="progOverlay" onclick="closeProgDrawer()"></div>
 
 <section class="atletismo-section" id="atletismo">
   <p class="section-tag">COMPETICIÓN DE ALTO NIVEL</p>
@@ -1358,8 +1524,10 @@
   <div class="supp-grid">
 
     <div class="supp-card">
+      <div class="supp-img-wrap">
+        <img src="powerdrink_cibeles-removebg-preview.png" alt="Power Drink" class="supp-product-img" style="width:160px;height:160px;transform:scale(1.5);" onerror="this.parentElement.innerHTML='<div style=\'font-size:40px;text-align:center;\'>⚡</div>'">
+      </div>
       <div class="supp-header">
-        <div class="supp-icon">⚡</div>
         <div>
           <h3>Power Drink</h3>
           <small>BEBIDA DEPORTIVA CON CARBOHIDRATOS + ELECTROLITOS</small>
@@ -1377,11 +1545,13 @@
     </div>
 
     <div class="supp-card">
+      <div class="supp-img-wrap">
+        <img src="CN-MALTOX-CIBELES-1.png" alt="MaltoX" class="supp-product-img" onerror="this.parentElement.innerHTML='<div style=\'font-size:40px;text-align:center;\'>🌾</div>'">
+      </div>
       <div class="supp-header">
-        <div class="supp-icon">🌾</div>
         <div>
-          <h3>Maltodextrina</h3>
-          <small>CARBOHIDRATO COMPLEJO DE RÁPIDA ABSORCIÓN</small>
+          <h3>MaltoX</h3>
+          <small>MALTODEXTRINA DE RÁPIDA ABSORCIÓN</small>
         </div>
       </div>
       <div class="supp-body">
@@ -1425,11 +1595,13 @@
     </div>
 
     <div class="supp-card">
+      <div class="supp-img-wrap">
+        <img src="creatina_cibeles.png" alt="Creatina Cibeles" class="supp-product-img" onerror="this.parentElement.innerHTML='<div style=\'font-size:40px;text-align:center;\'>💪</div>'">
+      </div>
       <div class="supp-header">
-        <div class="supp-icon">💪</div>
         <div>
           <h3>Creatina</h3>
-          <small>FUERZA Y POTENCIA</small>
+          <small>CREATINA MONOHIDRATO 100%</small>
         </div>
       </div>
       <div class="supp-body">
@@ -1470,6 +1642,39 @@
   </div>
 </section>
 
+<section class="fitpoint-section" id="fitpoint">
+  <p class="section-tag">TIENDA DEPORTIVA ALIADA</p>
+  <h2 class="section-title">FIT<br><em style="color:var(--orange);font-style:normal;">POINT</em></h2>
+
+  <div class="fitpoint-logo-box">
+    <img src="FITPOINT.png" alt="Fit Point" onerror="this.style.display='none'">
+  </div>
+
+  <div class="cibeles-badge">
+    <span>🏪</span>
+    <p>Tienda deportiva oficial aliada de runFIT — <strong>indumentaria, calzado y accesorios</strong> de las mejores marcas para corredores.</p>
+  </div>
+
+  <div class="fitpoint-card">
+    <h4>👟 Calzado Running</h4>
+    <p>Encontrá los mejores modelos de zapatillas para running, trail y entrenamiento. Fit Point tiene lo que necesitás para rendir al máximo.</p>
+  </div>
+
+  <div class="fitpoint-card">
+    <h4>👕 Indumentaria Técnica</h4>
+    <p>Ropa de muy buena calidad para entrenar en cualquier condición. Musculosas, shorts, camperas y más de las marcas líderes del mercado.</p>
+  </div>
+
+  <div class="fitpoint-card">
+    <h4>🎒 Accesorios Deportivos</h4>
+    <p>Mochilas, bolsos, botellas, medias técnicas y todo lo que necesitás para completar tu equipamiento como corredor.</p>
+  </div>
+
+  <div class="fitpoint-discount">
+    🏷️ DESCUENTOS EXCLUSIVOS PARA MIEMBROS DE RUNFIT
+  </div>
+</section>
+
 <section class="ropa-section" id="ropa">
   <p class="section-tag">EQUIPAMIENTO OFICIAL</p>
   <h2 class="section-title">ROPA<br>DEPORTIVA</h2>
@@ -1480,17 +1685,17 @@
 
   <div class="ropa-card">
     <h4>👟 Calzado Running</h4>
-    <p>Próximamente los modelos disponibles con beneficios exclusivos para miembros de runFIT. Escribinos para más info.</p>
+    <p> Todos los modelos con beneficios exclusivos para miembros de runFIT. </p>
   </div>
 
   <div class="ropa-card">
     <h4>👕 Indumentaria Técnica</h4>
-    <p>Ropa de entrenamiento de alta performance. Consultá disponibilidad y talles directamente con nosotros.</p>
+    <p>Ropa de entrenamiento de muy buena calidad. Consultá disponibilidad y talles directamente con nosotros.</p>
   </div>
 
   <div class="ropa-card">
     <h4>🎽 Equipamiento del Club</h4>
-    <p>Próximamente podrás ver y pedir la indumentaria oficial de runFIT Training aquí.</p>
+    <p>Ropa exclusiva del club, para que te sientas parte de nosotros!</p>
   </div>
 
   <div class="ropa-discount">
@@ -1741,6 +1946,88 @@
   function closeKidsDrawer() {
     document.getElementById('kidsDrawer').classList.remove('open');
     document.getElementById('kidsOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // PROGRAM DRAWERS
+  const progData = {
+    running: {
+      icon: '🏃',
+      tag: 'PROGRAMA PRINCIPAL',
+      name: 'Running',
+      info: [
+        { icon: '🎯', title: '¿Para quién es?', text: 'Para corredores de todos los niveles, desde quienes dan sus primeros pasos hasta los que buscan mejorar sus marcas. No hace falta experiencia previa.' },
+        { icon: '📍', title: 'Ubicaciones', text: 'Entrenamos en Pista del Prado (lunes y miércoles, 19:00 hs) y Parque Battle (martes y jueves, 19:15 hs). También en Ciudad de la Costa (lunes y miércoles, 19:00 hs).' },
+        { icon: '📋', title: 'Planificación', text: 'Cada corredor recibe un plan personalizado según su nivel y objetivos. Trabajamos fondo, velocidad, técnica y recuperación de forma progresiva.' },
+        { icon: '📱', title: 'App incluida', text: 'Como miembro tenés acceso a nuestra app de fortalecimiento con rutinas programadas según el período de planificación y tus objetivos personales.' },
+        { icon: '🏷️', title: 'Beneficios', text: 'Descuentos en New Balance, Fit Point y Cibeles Nutrition. Acceso a masajistas, fisioterapeuta y nutricionista del equipo.' },
+      ]
+    },
+    fuerza: {
+      icon: '🏋️',
+      tag: 'PROGRAMA COMPLEMENTARIO',
+      name: 'Fuerza',
+      info: [
+        { icon: '🎯', title: '¿Para qué sirve?', text: 'El entrenamiento de fuerza complementa el running, mejorando el rendimiento, previniendo lesiones y desarrollando la potencia muscular del corredor.' },
+        { icon: '👤', title: 'Coordinado por', text: 'Pablo Sosa, entrenador de fuerza de runFIT, diseña y supervisa todos los programas de fortalecimiento del club.' },
+        { icon: '📱', title: 'App de fortalecimiento', text: 'Accedé a nuestra app con las rutinas de cada semana. Las sesiones están programadas según el período de la planificación para que el trabajo de fuerza potencie tu running.' },
+        { icon: '🛡️', title: 'Prevención de lesiones', text: 'El trabajo de fuerza funcional reduce el riesgo de lesiones y mejora la economía de carrera. Más kilómetros, menos dolores.' },
+        { icon: '📈', title: 'Metodología', text: 'Combinamos fuerza funcional con especificidad del running: corredores más fuertes, rápidos y resistentes.' },
+      ]
+    },
+    atletismo: {
+      icon: '🏅',
+      tag: 'ALTO RENDIMIENTO',
+      name: 'Atletismo',
+      info: [
+        { icon: '🎯', title: '¿Para quién es?', text: 'Para atletas que buscan competir a nivel nacional e internacional. runFIT tiene una larga trayectoria en el atletismo competitivo uruguayo.' },
+        { icon: '🏆', title: 'Trayectoria', text: 'Nuestro equipo acumula múltiples podios en campeonatos nacionales master (2021–2025) y participaciones en torneos internacionales como el López Testa.' },
+        { icon: '📋', title: 'Planificación de temporada', text: 'Preparamos a cada atleta con una planificación anual que incluye períodos de base, desarrollo, competición y recuperación.' },
+        { icon: '🧪', title: 'Apoyo integral', text: 'Contamos con nutricionista, fisioterapeuta y masajistas que acompañan el proceso de cada atleta a lo largo de la temporada.' },
+        { icon: '🌎', title: 'Competencias', text: 'Participamos en campeonatos nacionales de atletismo y representamos al club en eventos internacionales.' },
+      ]
+    },
+    kids: {
+      icon: '🧒',
+      tag: 'PROGRAMA INFANTIL',
+      name: 'runFIT Kids',
+      info: [
+        { icon: '🎯', title: '¿Para quién es?', text: 'Para niños y niñas desde 6 años. No hace falta experiencia previa, solo ganas de moverse y divertirse.' },
+        { icon: '🎮', title: '¿Qué hacemos?', text: 'Un espacio donde los más chicos descubren el movimiento, desarrollan habilidades motrices y aprenden valores deportivos mientras se divierten.' },
+        { icon: '⭐', title: 'Entrenador', text: 'El programa está coordinado por Simón Texeira, que combina juego, técnica y alegría en cada sesión.' },
+        { icon: '❤️', title: 'Filosofía', text: 'Creemos que el deporte en la infancia forma personas más sanas y felices. Cada sesión es una aventura nueva para los chicos.' },
+      ]
+    }
+  };
+
+  function openProgDrawer(progId) {
+    const prog = progData[progId];
+    if (!prog) return;
+    document.getElementById('progDrawerIcon').textContent = prog.icon;
+    document.getElementById('progDrawerTag').textContent = prog.tag;
+    document.getElementById('progDrawerName').textContent = prog.name;
+    const bodyEl = document.getElementById('progDrawerBody');
+    bodyEl.innerHTML = prog.info.map(item => `
+      <div class="prog-info-card">
+        <div class="prog-info-icon">${item.icon}</div>
+        <div>
+          <h4>${item.title}</h4>
+          <p>${item.text}</p>
+        </div>
+      </div>
+    `).join('') + `
+      <a href="https://wa.me/+598099769754" target="_blank" class="prog-wa-btn">
+        💬 CONSULTAR POR WHATSAPP →
+      </a>
+    `;
+    document.getElementById('progDrawer').classList.add('open');
+    document.getElementById('progOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeProgDrawer() {
+    document.getElementById('progDrawer').classList.remove('open');
+    document.getElementById('progOverlay').classList.remove('open');
     document.body.style.overflow = '';
   }
 
