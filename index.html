@@ -97,6 +97,81 @@
     padding: 0 0 40px;
     overflow: hidden;
   }
+
+  /* ── CUBE SYSTEM ─────────────────────────────── */
+  .hero-cube-area {
+    position: absolute;
+    inset: 0;
+    perspective: 900px;
+    perspective-origin: 50% 40%;
+    overflow: hidden;
+    pointer-events: none; /* touches handled by swipe layer */
+  }
+
+  /* The rotating cube wrapper */
+  .hero-cube {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+    transform: rotateY(0deg);
+    transition: transform 0.72s cubic-bezier(.4,0,.2,1);
+  }
+  .hero-cube.show-video {
+    transform: rotateY(-90deg);
+  }
+  .hero-cube.return-logo {
+    transform: rotateY(0deg);
+  }
+
+  /* Face: front = logo / back = right face = video */
+  .cube-face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+  }
+  .cube-face-logo {
+    transform: rotateY(0deg) translateZ(0);
+    background: var(--black);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .cube-face-video {
+    transform: rotateY(90deg) translateZ(0);
+    background: #000;
+    overflow: hidden;
+  }
+  .cube-face-video video {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover;
+  }
+  .cube-face-video .cube-video-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.55) 100%);
+    pointer-events: none;
+  }
+
+  /* ── LOGO inside cube front face ─────────────── */
+  .cube-logo-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 1;
+    mix-blend-mode: normal;
+    user-select: none;
+    pointer-events: none;
+    border-radius: 0;
+  }
+
+  /* Background gradient grid (stays on hero-bg) */
   .hero-bg {
     position: absolute;
     inset: 0;
@@ -110,41 +185,148 @@
         rgba(244,127,32,0.04) 41px
       );
     transition: opacity 0.5s ease;
+    pointer-events: none;
   }
   .hero-bg.hidden { opacity: 0; }
 
-  /* VIDEO BACKGROUND */
-  .hero-video {
-    position: absolute;
-    inset: 0;
-    width: 100%; height: 100%;
-    object-fit: cover;
-    opacity: 0;
-    transition: opacity 0.6s ease;
-    pointer-events: none;
-  }
-  .hero-video.visible { opacity: 1; }
-  .hero-video-overlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to bottom, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.65) 100%);
-    opacity: 0;
-    transition: opacity 0.6s ease;
-    pointer-events: none;
-  }
-  .hero-video-overlay.visible { opacity: 1; }
+  /* Old standalone video — hidden, cube handles it */
+  .hero-video { display: none; }
+  .hero-video-overlay { display: none; }
 
-  .hero-number {
+  /* ── SWIPE TOUCH LAYER ───────────────────────── */
+  .hero-swipe-layer {
     position: absolute;
-    top: -20px; right: -10px;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 220px;
-    color: rgba(244,127,32,0.06);
-    line-height: 1;
-    user-select: none;
-    transition: opacity 0.5s ease;
+    inset: 0;
+    z-index: 10;
+    cursor: grab;
+    -webkit-tap-highlight-color: transparent;
   }
-  .hero-number.hidden { opacity: 0; }
+  .hero-swipe-layer:active { cursor: grabbing; }
+
+  /* ── SWIPE HINT (top-right) ──────────────────── */
+  .hero-controls {
+    position: absolute;
+    top: 16px; right: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 20;
+    pointer-events: all;
+  }
+
+  .hero-swipe-hint {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,0,0,0.55);
+    border: 1.5px solid rgba(244,127,32,0.75);
+    border-radius: 30px;
+    padding: 8px 14px 8px 10px;
+    cursor: pointer;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 2px 12px rgba(0,0,0,0.35);
+    transition: opacity .3s ease, transform .1s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .hero-swipe-hint:active { transform: scale(0.95); }
+  .hero-swipe-hint.hidden { opacity: 0; pointer-events: none; }
+
+  .swipe-track {
+    width: 42px; height: 22px;
+    background: rgba(244,127,32,0.18);
+    border-radius: 11px;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .swipe-thumb {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--orange);
+    position: absolute;
+    top: 3px; left: 3px;
+    animation: swipeRight 1.7s ease-in-out infinite;
+    box-shadow: 0 1px 6px rgba(244,127,32,0.6);
+  }
+  @keyframes swipeRight {
+    0%   { left: 3px; opacity: 1; }
+    55%  { left: 23px; opacity: 1; }
+    75%  { left: 23px; opacity: 0; }
+    76%  { left: 3px; opacity: 0; }
+    100% { left: 3px; opacity: 1; }
+  }
+  .swipe-arrows {
+    position: absolute;
+    top: 50%; left: 0; right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 4px;
+    gap: 2px;
+    animation: arrowFade 1.7s ease-in-out infinite;
+  }
+  .swipe-arrow {
+    width: 5px; height: 5px;
+    border-right: 1.5px solid rgba(244,127,32,0.55);
+    border-top: 1.5px solid rgba(244,127,32,0.55);
+    transform: rotate(45deg);
+  }
+  @keyframes arrowFade {
+    0%,25% { opacity: 0; }
+    55%    { opacity: 1; }
+    80%,100% { opacity: 0; }
+  }
+  .swipe-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: rgba(255,255,255,0.9);
+    white-space: nowrap;
+  }
+
+  /* ── CLOSE / MUTE buttons (visible during video) */
+  .hero-play-btn {
+    display: none;
+    align-items: center;
+    gap: 7px;
+    background: rgba(244,127,32,0.95);
+    color: var(--black);
+    border: none;
+    padding: 9px 16px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background .2s, transform .1s;
+    flex-shrink: 0;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.4);
+  }
+  .hero-play-btn.visible { display: flex; }
+  .hero-play-btn:active { transform: scale(0.95); }
+  .hero-play-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+  .hero-mute-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.6);
+    border: 2px solid rgba(255,255,255,0.3);
+    color: white;
+    display: none; align-items: center; justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background .2s, transform .1s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  }
+  .hero-mute-btn.visible { display: flex; }
+  .hero-mute-btn svg { width: 16px; height: 16px; }
+  .hero-mute-btn:active { transform: scale(0.91); }
+
+  /* CUBE REMOVED - replaced by cube widget */
+  .hero-number { display: none; }
 
   .hero-content {
     position: relative;
@@ -168,56 +350,6 @@
     to { opacity:1; transform: translateY(0); }
   }
 
-  /* VIDEO CONTROLS — top right (círculo verde) */
-  .hero-controls {
-    position: absolute;
-    top: 16px; right: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    z-index: 20;
-  }
-  .hero-play-btn {
-    display: flex;
-    align-items: center;
-    gap: 7px;
-    background: rgba(244,127,32,0.95);
-    color: var(--black);
-    border: none;
-    padding: 9px 16px;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-weight: 700;
-    font-size: 13px;
-    letter-spacing: 2px;
-    cursor: pointer;
-    border-radius: 6px;
-    transition: background .2s, transform .1s;
-    flex-shrink: 0;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.4);
-  }
-  .hero-play-btn:active { transform: scale(0.95); }
-  .hero-play-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
-
-  .hero-mute-btn {
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    background: rgba(0,0,0,0.6);
-    border: 2px solid rgba(255,255,255,0.3);
-    color: white;
-    display: flex; align-items: center; justify-content: center;
-    cursor: pointer;
-    flex-shrink: 0;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.4s ease, background .2s, transform .1s;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-  }
-  .hero-mute-btn.visible {
-    opacity: 1;
-    pointer-events: all;
-  }
-  .hero-mute-btn svg { width: 16px; height: 16px; }
-  .hero-mute-btn:active { transform: scale(0.91); }
   .hero-tag {
     display: inline-block;
     background: var(--orange);
@@ -231,7 +363,7 @@
   }
   .hero h1 {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 72px;
+    font-size: 68px;
     line-height: 0.9;
     letter-spacing: 2px;
     margin-bottom: 20px;
@@ -1184,10 +1316,34 @@
 </div>
 
 <section class="hero" id="inicio">
+
+  <!-- Static background gradient -->
   <div class="hero-bg" id="heroBg"></div>
-  <video class="hero-video" id="heroVideo" src="hero-video.mp4" playsinline loop muted></video>
-  <div class="hero-video-overlay" id="heroOverlay"></div>
-  <div class="hero-number" id="heroNumber">RF</div>
+
+  <!-- Logo hero standalone -->
+
+  <!-- 3D Cube area -->
+  <div class="hero-cube-area">
+    <div class="hero-cube" id="heroCube">
+
+      <!-- FACE FRONT: logo watermark -->
+      <div class="cube-face cube-face-logo">
+        <img src="logo_runfit_2.jpeg" alt="runFIT Training" class="cube-logo-img">
+      </div>
+
+      <!-- FACE RIGHT: video (rotates in from the right) -->
+      <div class="cube-face cube-face-video">
+        <video id="heroVideo" src="hero-video.mp4" playsinline muted preload="metadata"></video>
+        <div class="cube-video-overlay"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Invisible swipe layer -->
+  <div class="hero-swipe-layer" id="heroSwipeLayer"></div>
+
+  <!-- Hero text content (left side) -->
   <div class="hero-content" id="heroContent">
     <div class="hero-tag">🏃 CLUB DE RUNNING</div>
     <h1>CONTIGO<em>EN CADA<br>PASO</em></h1>
@@ -1197,6 +1353,8 @@
       <a href="#programas" class="btn-outline">PROGRAMAS</a>
     </div>
   </div>
+
+  <!-- Controls top-right -->
   <div class="hero-controls">
     <button class="hero-mute-btn" id="heroMuteBtn" onclick="toggleHeroMute()" title="Silenciar/Activar sonido">
       <svg id="heroSoundIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16">
@@ -1204,11 +1362,24 @@
         <path id="heroSoundWave" d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>
       </svg>
     </button>
-    <button class="hero-play-btn" id="heroPlayBtn" onclick="toggleHeroVideo()">
-      <svg id="heroPlayIcon" viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><polygon points="5,3 19,12 5,21"/></svg>
-      <span id="heroPlayLabel">VER VIDEO</span>
+    <!-- Swipe hint (default) -->
+    <div class="hero-swipe-hint" id="heroSwipeHint" onclick="startVideo()">
+      <div class="swipe-track">
+        <div class="swipe-thumb"></div>
+        <div class="swipe-arrows">
+          <div class="swipe-arrow"></div>
+          <div class="swipe-arrow"></div>
+        </div>
+      </div>
+      <span class="swipe-label">DESLIZÁ PARA VER</span>
+    </div>
+    <!-- Close button (shown during video) -->
+    <button class="hero-play-btn" id="heroPlayBtn" onclick="stopVideo()">
+      <svg viewBox="0 0 24 24" fill="currentColor" width="14" height="14"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+      <span>OCULTAR</span>
     </button>
   </div>
+
 </section>
 
 <div class="stats">
@@ -1726,86 +1897,77 @@
 
 <script>
   // HERO VIDEO
+  // ── CUBE VIDEO SYSTEM ────────────────────────────────────────
   let videoPlaying = false;
   let videoMuted = true;
 
-  function hideHeroContent() {
-    const el = document.getElementById('heroContent');
-    el.classList.add('fading');
-    void el.offsetWidth; // force reflow
-    el.classList.add('hidden');
-    el.classList.remove('fading');
+  const cube       = document.getElementById('heroCube');
+  const heroVideo  = document.getElementById('heroVideo');
+  const heroBg     = document.getElementById('heroBg');
+  const heroContent= document.getElementById('heroContent');
+  const swipeHint  = document.getElementById('heroSwipeHint');
+  const playBtn    = document.getElementById('heroPlayBtn');
+  const muteBtn    = document.getElementById('heroMuteBtn');
+  const swipeLayer = document.getElementById('heroSwipeLayer');
+
+  function startVideo() {
+    if (videoPlaying) return;
+    videoPlaying = true;
+    heroVideo.muted = true;
+    videoMuted = true;
+    heroVideo.currentTime = 0;
+    heroVideo.play();
+    cube.classList.add('show-video');
+    heroBg.classList.add('hidden');
+    // hide logo
+    const logoImg = document.querySelector('.cube-logo-img');
+    const logoRing = document.getElementById('heroLogoRing');
+    if (logoImg) { logoImg.style.opacity = '0'; logoImg.style.pointerEvents = 'none'; }
+    if (logoRing) logoRing.style.opacity = '0';
+    // fade out text
+    heroContent.classList.add('fading');
+    void heroContent.offsetWidth;
+    heroContent.classList.add('hidden');
+    heroContent.classList.remove('fading');
+    // swap buttons
+    swipeHint.classList.add('hidden');
+    playBtn.classList.add('visible');
+    muteBtn.classList.add('visible');
+    updateMuteIcon();
   }
 
-  function showHeroContent() {
-    const el = document.getElementById('heroContent');
-    el.classList.add('fading');
-    void el.offsetWidth;
-    el.classList.remove('hidden');
-    // remove fading class after transition ends
-    setTimeout(() => el.classList.remove('fading'), 600);
-  }
-
-  function restoreHero() {
-    const video = document.getElementById('heroVideo');
-    const overlay = document.getElementById('heroOverlay');
-    const heroBg = document.getElementById('heroBg');
-    const heroNumber = document.getElementById('heroNumber');
-    const playIcon = document.getElementById('heroPlayIcon');
-    const playLabel = document.getElementById('heroPlayLabel');
-    const muteBtn = document.getElementById('heroMuteBtn');
+  function stopVideo() {
+    if (!videoPlaying) return;
     videoPlaying = false;
-    video.pause();
-    video.currentTime = 0;
-    video.classList.remove('visible');
-    overlay.classList.remove('visible');
+    cube.classList.remove('show-video');
+    // show logo
+    const logoImg = document.querySelector('.cube-logo-img');
+    const logoRing = document.getElementById('heroLogoRing');
+    if (logoImg) { logoImg.style.opacity = '1'; logoImg.style.pointerEvents = 'none'; }
+    if (logoRing) logoRing.style.opacity = '1';
+    // wait for cube to rotate back, then pause video
+    setTimeout(() => {
+      heroVideo.pause();
+      heroVideo.currentTime = 0;
+    }, 720);
     heroBg.classList.remove('hidden');
-    heroNumber.classList.remove('hidden');
+    // fade in text
+    heroContent.classList.add('fading');
+    void heroContent.offsetWidth;
+    heroContent.classList.remove('hidden');
+    setTimeout(() => heroContent.classList.remove('fading'), 600);
+    // swap buttons
+    swipeHint.classList.remove('hidden');
+    playBtn.classList.remove('visible');
     muteBtn.classList.remove('visible');
-    playIcon.innerHTML = '<polygon points="5,3 19,12 5,21"/>';
-    playLabel.textContent = 'VER VIDEO';
-    showHeroContent();
   }
 
-  function toggleHeroVideo() {
-    const video = document.getElementById('heroVideo');
-    const overlay = document.getElementById('heroOverlay');
-    const heroBg = document.getElementById('heroBg');
-    const heroNumber = document.getElementById('heroNumber');
-    const playIcon = document.getElementById('heroPlayIcon');
-    const playLabel = document.getElementById('heroPlayLabel');
-    const muteBtn = document.getElementById('heroMuteBtn');
-
-    videoPlaying = !videoPlaying;
-
-    if (videoPlaying) {
-      video.muted = true;
-      videoMuted = true;
-      video.currentTime = 0;
-      video.play();
-      video.classList.add('visible');
-      overlay.classList.add('visible');
-      heroBg.classList.add('hidden');
-      heroNumber.classList.add('hidden');
-      muteBtn.classList.add('visible');
-      playIcon.innerHTML = '<rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/>';
-      playLabel.textContent = 'OCULTAR';
-      updateMuteIcon();
-      hideHeroContent();
-    } else {
-      restoreHero();
-    }
-  }
-
-  // Al terminar el video, vuelve al estado normal
-  document.getElementById('heroVideo').addEventListener('ended', () => {
-    restoreHero();
-  });
+  // Video ends → rotate cube back automatically
+  heroVideo.addEventListener('ended', stopVideo);
 
   function toggleHeroMute() {
-    const video = document.getElementById('heroVideo');
     videoMuted = !videoMuted;
-    video.muted = videoMuted;
+    heroVideo.muted = videoMuted;
     updateMuteIcon();
   }
 
@@ -1817,6 +1979,39 @@
       icon.innerHTML = '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/>';
     }
   }
+
+  // ── SWIPE / DRAG DETECTION on swipe layer ──────────────────
+  (function() {
+    let startX = null, startY = null, dragging = false;
+    const THRESHOLD = 40; // px to trigger
+
+    function onStart(e) {
+      const pt = e.touches ? e.touches[0] : e;
+      startX = pt.clientX;
+      startY = pt.clientY;
+      dragging = true;
+    }
+    function onEnd(e) {
+      if (!dragging || startX === null) return;
+      const pt = e.changedTouches ? e.changedTouches[0] : e;
+      const dx = pt.clientX - startX;
+      const dy = pt.clientY - startY;
+      dragging = false;
+      // Only horizontal swipe (dx dominant)
+      if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > THRESHOLD) {
+        if (dx < 0 && !videoPlaying) startVideo();   // swipe left → show video
+        if (dx > 0 &&  videoPlaying) stopVideo();    // swipe right → hide video
+      }
+      startX = startY = null;
+    }
+    function onCancel() { dragging = false; startX = startY = null; }
+
+    swipeLayer.addEventListener('touchstart', onStart, { passive: true });
+    swipeLayer.addEventListener('touchend',   onEnd,   { passive: true });
+    swipeLayer.addEventListener('touchcancel',onCancel);
+    swipeLayer.addEventListener('mousedown',  onStart);
+    swipeLayer.addEventListener('mouseup',    onEnd);
+  })();
 
   document.querySelectorAll('.tab').forEach(tab => {
     tab.addEventListener('click', () => {
